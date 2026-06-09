@@ -2,11 +2,10 @@
 using UnityEngine.UI;
 using System.Collections.Generic;
 
+
+// ABANDON HOPE ALL YE WHO ENTER HERE
 public class TracingMinigame : MonoBehaviour
 {
-    // ─────────────────────────────────────────────────────────────
-    //  INSPECTOR
-    // ─────────────────────────────────────────────────────────────
 
     [Header("Stroke Settings")]
     [Tooltip("How many strokes to split the triquetra into (3 recommended)")]
@@ -40,16 +39,8 @@ public class TracingMinigame : MonoBehaviour
     [SerializeField] private AudioClip drawingSound;
     [SerializeField] private AudioClip mistakeSound;
 
-    // ─────────────────────────────────────────────────────────────
-    //  EVENTS
-    // ─────────────────────────────────────────────────────────────
-
     public System.Action OnSuccess;
     public System.Action OnFail;
-
-    // ─────────────────────────────────────────────────────────────
-    //  PRIVATE STATE
-    // ─────────────────────────────────────────────────────────────
 
     private List<Vector2[]> _strokes = new List<Vector2[]>();
     private List<Image[]> _strokeDots = new List<Image[]>();
@@ -59,10 +50,6 @@ public class TracingMinigame : MonoBehaviour
     private int _mistakes = 0;
     private int _activeStroke = -1;
     private bool _mouseHeld = false;
-
-    // ─────────────────────────────────────────────────────────────
-    //  PUBLIC API
-    // ─────────────────────────────────────────────────────────────
 
     public void StartMinigame()
     {
@@ -81,10 +68,6 @@ public class TracingMinigame : MonoBehaviour
 
         UpdateProgress();
     }
-
-    // ─────────────────────────────────────────────────────────────
-    //  UPDATE
-    // ─────────────────────────────────────────────────────────────
 
     private void Update()
     {
@@ -161,10 +144,6 @@ public class TracingMinigame : MonoBehaviour
                 RegisterMistake();
         }
     }
-
-    // ─────────────────────────────────────────────────────────────
-    //  MISTAKE / RESET
-    // ─────────────────────────────────────────────────────────────
 
     private void RegisterMistake()
     {
@@ -245,13 +224,8 @@ public class TracingMinigame : MonoBehaviour
 
     private List<Vector2> BuildFullTriquetraPoints()
     {
-        // Bounding box of the shape is 3.732R wide and 3.5R tall.
-        // Scale R so the shape fits inside the tracing area with a margin.
         float R = Mathf.Min(tracingArea.rect.width, tracingArea.rect.height) * 0.49f;
 
-        // The shape's vertical centre sits 0.25R below the origin
-        // (top extent = 1.5R, bottom extent = -2R, midpoint = -0.25R).
-        // Shift all points up by 0.25R so the shape is centred in the panel.
         Vector2 centeringOffset = new Vector2(0f, -0.25f * R);
 
         // Centre angles in degrees: bottom, top-right, top-left
@@ -281,10 +255,6 @@ public class TracingMinigame : MonoBehaviour
 
         return points;
     }
-
-    // ─────────────────────────────────────────────────────────────
-    //  DOT RENDERING
-    // ─────────────────────────────────────────────────────────────
 
     private Image[] DrawStroke(int si, Vector2[] pts)
     {
@@ -320,10 +290,6 @@ public class TracingMinigame : MonoBehaviour
         _strokeDots.Clear();
     }
 
-    // ─────────────────────────────────────────────────────────────
-    //  PROGRESS BAR
-    // ─────────────────────────────────────────────────────────────
-
     private void UpdateProgress()
     {
         if (progressIndicator == null) return;
@@ -337,10 +303,6 @@ public class TracingMinigame : MonoBehaviour
 
         progressIndicator.fillAmount = total > 0 ? (float)completed / total : 0f;
     }
-
-    // ─────────────────────────────────────────────────────────────
-    //  AUDIO
-    // ─────────────────────────────────────────────────────────────
 
     private void PlayDrawingSound()
     {
