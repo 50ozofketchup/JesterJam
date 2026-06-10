@@ -29,6 +29,7 @@ public class TracingMinigameManager : MonoBehaviour
 
     private void Close()
     {
+        tracingMinigame.StopMinigame();
         tracingPanel.SetActive(false);
         playerMovement.inputLocked = false;
         mouseLook.enabled = true;

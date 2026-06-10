@@ -2,16 +2,19 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
+using TMPro;
 
 public class RotationMinigame : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private Texture2D sourceImage;
     [SerializeField] private RectTransform gridContainer;
+    [SerializeField] private TMP_Text instructionText;
 
     [Header("Settings")]
     [SerializeField] private float rotateDuration = 0.2f;
     [SerializeField] private float cellGap = 4f;
+    [SerializeField] private string minigameText = "Rotate each piece into place to complete the symbol.";
 
     public System.Action OnSuccess;
 
@@ -25,6 +28,7 @@ public class RotationMinigame : MonoBehaviour
     {
         _completed = false;
         _active = true;
+        if (instructionText != null) instructionText.text = minigameText;
         BuildGrid();
         ScramblePieces();
     }
@@ -33,6 +37,7 @@ public class RotationMinigame : MonoBehaviour
     {
         _active = false;
         _completed = false;
+        if (instructionText != null) instructionText.text = string.Empty;
     }
 
     private void BuildGrid()

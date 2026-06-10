@@ -1,23 +1,18 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using TMPro;
 
-
-// ABANDON HOPE ALL YE WHO ENTER HERE
 public class TracingMinigame : MonoBehaviour
 {
-
     [Header("Stroke Settings")]
-    [Tooltip("How many strokes to split the triquetra into (3 recommended)")]
     [SerializeField] private int strokeCount = 3;
-    [Tooltip("Dot density per arc — higher = smoother path")]
     [SerializeField] private int pointsPerArc = 50;
 
     [Header("Tracing Settings")]
     [SerializeField] private float tolerance = 22f;
 
     [Header("Failure Settings")]
-    [Tooltip("Untick to disable failure entirely (useful for testing)")]
     [SerializeField] private bool failureEnabled = true;
     [SerializeField] private int maxMistakes = 3;
 
@@ -25,6 +20,7 @@ public class TracingMinigame : MonoBehaviour
     [SerializeField] private RectTransform tracingArea;
     [SerializeField] private Image progressIndicator;
     [SerializeField] private Image cursorDot;
+    [SerializeField] private TMP_Text instructionText;
 
     [Header("Path Visuals")]
     [SerializeField] private Color pathColor = new Color(0.75f, 0.75f, 0.75f, 1f);
@@ -39,6 +35,9 @@ public class TracingMinigame : MonoBehaviour
     [SerializeField] private AudioClip drawingSound;
     [SerializeField] private AudioClip mistakeSound;
 
+    [Header("Settings")]
+    [SerializeField] private string minigameText = "Trace the symbol.";
+
     public System.Action OnSuccess;
     public System.Action OnFail;
 
@@ -46,7 +45,6 @@ public class TracingMinigame : MonoBehaviour
     private List<Image[]> _strokeDots = new List<Image[]>();
     private int[] _strokeProgress;
     private bool[] _strokeDone;
-
     private int _mistakes = 0;
     private int _activeStroke = -1;
     private bool _mouseHeld = false;
@@ -63,10 +61,20 @@ public class TracingMinigame : MonoBehaviour
         _activeStroke = -1;
         _mouseHeld = false;
 
+        if (instructionText != null) instructionText.text = minigameText;
+
         for (int i = 0; i < _strokes.Count; i++)
             _strokeDots.Add(DrawStroke(i, _strokes[i]));
 
         UpdateProgress();
+    }
+
+    public void StopMinigame()
+    {
+        _activeStroke = -1;
+        _mouseHeld = false;
+        StopDrawingSound();
+        if (instructionText != null) instructionText.text = string.Empty;
     }
 
     private void Update()
@@ -182,31 +190,13 @@ public class TracingMinigame : MonoBehaviour
         return true;
     }
 
-    // ─────────────────────────────────────────────────────────────
-    //  TRIQUETRA GEOMETRY
-    // ─────────────────────────────────────────────────────────────
-    //
-    //  Three circles radius R, centres at distance R from origin:
-    //    C0 = (0, -R)          bottom        centre angle -90°
-    //    C1 = (R√3/2,  R/2)   top-right     centre angle  30°
-    //    C2 = (-R√3/2, R/2)   top-left      centre angle 150°
-    //
-    //  Each arc sweeps 240° CLOCKWISE from (ca + 120°) to (ca - 120°).
-    //  Verified junction world positions (units of R):
-    //    Arc 0: ( √3/2, -0.5) → (-√3/2, -0.5)
-    //    Arc 1: ( 0,     1.0) → ( √3/2, -0.5)
-    //    Arc 2: (-√3/2, -0.5) → ( 0,     1.0)
-    //
-    // ─────────────────────────────────────────────────────────────
-
     private List<Vector2[]> GenerateTriquetraStrokes()
     {
         List<Vector2> full = BuildFullTriquetraPoints();
-
         int total = full.Count;
         int perStroke = Mathf.CeilToInt((float)total / strokeCount);
-
         var result = new List<Vector2[]>();
+
         for (int s = 0; s < strokeCount; s++)
         {
             int start = s * perStroke;
@@ -225,24 +215,16 @@ public class TracingMinigame : MonoBehaviour
     private List<Vector2> BuildFullTriquetraPoints()
     {
         float R = Mathf.Min(tracingArea.rect.width, tracingArea.rect.height) * 0.49f;
-
         Vector2 centeringOffset = new Vector2(0f, -0.25f * R);
-
-        // Centre angles in degrees: bottom, top-right, top-left
         float[] centresDeg = { -90f, 30f, 150f };
-
-        // Each arc: start at (ca + 240°), sweep 120° CW (confirmed by plot)
-        float arcSpanRad = -2f * Mathf.PI / 3f; // negative = clockwise
-
+        float arcSpanRad = -2f * Mathf.PI / 3f;
         var points = new List<Vector2>(pointsPerArc * 3);
 
         for (int i = 0; i < 3; i++)
         {
             float ca = centresDeg[i] * Mathf.Deg2Rad;
             Vector2 centre = new Vector2(Mathf.Cos(ca), Mathf.Sin(ca)) * R;
-            float startA = ca + 4f * Mathf.PI / 3f; // ca + 240°
-
-            // Skip point 0 on arcs 1 & 2 — shared junction with previous arc
+            float startA = ca + 4f * Mathf.PI / 3f;
             int startJ = (i == 0) ? 0 : 1;
 
             for (int j = startJ; j < pointsPerArc; j++)
