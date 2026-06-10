@@ -14,7 +14,12 @@ public class RotationMinigame : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private float rotateDuration = 0.2f;
     [SerializeField] private float cellGap = 4f;
-    [SerializeField] private string minigameText = "Rotate each piece into place to complete the symbol.";
+    [SerializeField] private string minigameText = "Rotate each piece into place.";
+
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip rotateSound;
+    [SerializeField] private AudioClip completeSound;
 
     public System.Action OnSuccess;
 
@@ -119,6 +124,9 @@ public class RotationMinigame : MonoBehaviour
     {
         _animating[idx] = true;
 
+        if (audioSource != null && rotateSound != null)
+            audioSource.PlayOneShot(rotateSound);
+
         Quaternion startRot = _cells[idx].localRotation;
         Quaternion endRot = startRot * Quaternion.Euler(0f, 0f, -90f);
 
@@ -143,6 +151,8 @@ public class RotationMinigame : MonoBehaviour
 
         _completed = true;
         _active = false;
+        if (audioSource != null && completeSound != null)
+            audioSource.PlayOneShot(completeSound);
         OnSuccess?.Invoke();
     }
 }
