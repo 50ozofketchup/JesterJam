@@ -6,6 +6,7 @@ public class RotationMinigameManager : MonoBehaviour
     [SerializeField] private RotationMinigame rotationMinigame;
     [SerializeField] private PlayerMovement playerMovement;
     [SerializeField] private MouseLook mouseLook;
+    [SerializeField] private InteractionHandler interactionHandler;
 
     public System.Action OnSuccess;
 
@@ -26,6 +27,7 @@ public class RotationMinigameManager : MonoBehaviour
         minigamePanel.SetActive(true);
         playerMovement.inputLocked = true;
         mouseLook.enabled = false;
+        interactionHandler?.SetLocked(true);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         rotationMinigame.StartMinigame();
@@ -37,6 +39,7 @@ public class RotationMinigameManager : MonoBehaviour
         minigamePanel.SetActive(false);
         playerMovement.inputLocked = false;
         mouseLook.enabled = true;
+        interactionHandler?.SetLocked(false);
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
