@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public enum MinigameType { Tracing, Rotation, None }
+public enum MinigameType { Tracing, Rotation, SimonSays, None }
 
 public class Interactable : MonoBehaviour
 {

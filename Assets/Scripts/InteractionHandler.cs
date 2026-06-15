@@ -13,6 +13,7 @@ public class InteractionHandler : MonoBehaviour
     [SerializeField] private TMP_Text promptText;
     [SerializeField] private TracingMinigameManager tracingManager;
     [SerializeField] private RotationMinigameManager rotationManager;
+    [SerializeField] private SimonSaysMinigameManager simonSaysManager;
 
     private Interactable _currentInteractable;
     private bool _locked;
@@ -62,6 +63,10 @@ public class InteractionHandler : MonoBehaviour
             case MinigameType.Rotation:
                 rotationManager?.Open();
                 break;
+            case MinigameType.SimonSays:
+                simonSaysManager?.Open();
+                break;
+          
         }
     }
 }
