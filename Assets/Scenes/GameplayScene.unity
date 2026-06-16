@@ -5885,9 +5885,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d01c55923dd80394f9de8c36e4d3f341, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Interactable
-  minigameType: 1
+  minigameType: 3
   promptText: Press E to interact
-  inkJson: {fileID: 0}
+  inkJson: {fileID: 4900000, guid: 24095046008333940b22601cbd4786ad, type: 3}
 --- !u!1 &2104081159
 GameObject:
   m_ObjectHideFlags: 0
