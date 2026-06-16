@@ -53,6 +53,7 @@ public class DialogueManager : MonoBehaviour
         IsOpen = true;
 
         dialoguePanel.SetActive(true);
+        if (speakerName != null) speakerName.gameObject.SetActive(true);
         playerMovement.inputLocked = true;
         mouseLook.enabled = false;
         interactionHandler?.SetLocked(true);
@@ -79,9 +80,7 @@ public class DialogueManager : MonoBehaviour
             if (HandleTags())
                 return;
 
-            ParseSpeaker(line, out string speaker, out string text);
-            speakerName.text = speaker;
-            dialogueText.text = text;
+            dialogueText.text = line.Trim();
             HideChoices();
 
             if (_story.currentChoices.Count > 0)
@@ -102,9 +101,7 @@ public class DialogueManager : MonoBehaviour
             if (trimmed == "restart")
             {
                 _story.Continue();
-                ParseSpeaker(_story.currentText, out string speaker, out string text);
-                speakerName.text = speaker;
-                dialogueText.text = text;
+                dialogueText.text = _story.currentText.Trim();
                 HideChoices();
                 tryAgainButton.gameObject.SetActive(true);
                 return true;
@@ -170,25 +167,13 @@ public class DialogueManager : MonoBehaviour
         AdvanceDialogue();
     }
 
-    private void ParseSpeaker(string line, out string speaker, out string text)
-    {
-        if (line.Contains(":"))
-        {
-            int colon = line.IndexOf(':');
-            speaker = line.Substring(0, colon).Trim();
-            text = line.Substring(colon + 1).Trim();
-        }
-        else
-        {
-            speaker = string.Empty;
-            text = line.Trim();
-        }
-    }
+
 
     private void EndDialogue()
     {
         IsOpen = false;
         dialoguePanel.SetActive(false);
+        if (speakerName != null) speakerName.gameObject.SetActive(false);
         playerMovement.inputLocked = false;
         mouseLook.enabled = true;
         interactionHandler?.SetLocked(false);
