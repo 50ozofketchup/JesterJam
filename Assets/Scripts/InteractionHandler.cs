@@ -14,6 +14,7 @@ public class InteractionHandler : MonoBehaviour
     [SerializeField] private TracingMinigameManager tracingManager;
     [SerializeField] private RotationMinigameManager rotationManager;
     [SerializeField] private SimonSaysMinigameManager simonSaysManager;
+    [SerializeField] private DialogueManager dialogueManager;
 
     private Interactable _currentInteractable;
     private bool _locked;
@@ -27,7 +28,6 @@ public class InteractionHandler : MonoBehaviour
     private void Update()
     {
         CheckForInteractable();
-
         if (_currentInteractable != null && Input.GetKeyDown(interactKey))
             Interact(_currentInteractable);
     }
@@ -66,7 +66,9 @@ public class InteractionHandler : MonoBehaviour
             case MinigameType.SimonSays:
                 simonSaysManager?.Open();
                 break;
-          
+            case MinigameType.Dialogue:
+                dialogueManager?.StartDialogue(interactable.inkJson);
+                break;
         }
     }
 }
