@@ -1264,8 +1264,12 @@ MonoBehaviour:
   dimAlpha: 0.4
   maxMistakes: 3
   audioSource: {fileID: 322482708}
-  symbolSounds: []
-  wrongSound: {fileID: 0}
+  symbolSounds:
+  - {fileID: 8300000, guid: 993f1533072a9af4da454ed847f103e8, type: 3}
+  - {fileID: 8300000, guid: 993f1533072a9af4da454ed847f103e8, type: 3}
+  - {fileID: 8300000, guid: 993f1533072a9af4da454ed847f103e8, type: 3}
+  - {fileID: 8300000, guid: 993f1533072a9af4da454ed847f103e8, type: 3}
+  wrongSound: {fileID: 8300000, guid: 8e20a3785797f27449f5138a5ffff02e, type: 3}
   roundCompleteSound: {fileID: 0}
   winSound: {fileID: 0}
 --- !u!114 &322482706
@@ -8574,7 +8578,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Interactable
   minigameType: 3
   promptText: Press E to interact
-  inkJson: {fileID: 4900000, guid: 24095046008333940b22601cbd4786ad, type: 3}
+  inkJson: {fileID: 4900000, guid: ec4c79af3c7452142bdaa408a50e3eaa, type: 3}
 --- !u!1 &2104081159
 GameObject:
   m_ObjectHideFlags: 0
