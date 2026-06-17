@@ -5897,8 +5897,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 30
-  m_fontSizeBase: 30
+  m_fontSize: 40
+  m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -6238,8 +6238,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.7131906, z: -0, w: 0.7009702}
   m_LocalPosition: {x: 94.11003, y: 8.09, z: 257.63315}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1.3, y: 1.3, z: 1.3}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 561636421}
   - {fileID: 330585546}
@@ -6774,13 +6774,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LetterManager
   introLetter:
-  - {fileID: 4900000, guid: 46f8ccbd756fe724eb3f201e018f473f, type: 3}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 4900000, guid: cb70c2b7fc675c74cb584f01c1789141, type: 3}
+  - {fileID: 4900000, guid: afcdeb55e2a6b304ca71a6408a82d4e0, type: 3}
   outroLetter:
-  - {fileID: 4900000, guid: ef123b4d56af34e4fa2ae63292a3e1e8, type: 3}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 4900000, guid: ed3158ed7c4cc7841adbd702caee7fdb, type: 3}
+  - {fileID: 4900000, guid: b0a454efe60f8e54ab55bf0762e9045e, type: 3}
   letterPanel: {fileID: 300166168}
   letterText: {fileID: 1297320048}
   playerMovement: {fileID: 1349798774}
@@ -8578,7 +8576,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Interactable
   minigameType: 3
   promptText: Press E to interact
-  inkJson: {fileID: 4900000, guid: ec4c79af3c7452142bdaa408a50e3eaa, type: 3}
+  inkJson: {fileID: 4900000, guid: f0b218cdbdd49c24a8a4eb98cde3902c, type: 3}
 --- !u!1 &2104081159
 GameObject:
   m_ObjectHideFlags: 0
