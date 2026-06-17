@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class StoryProgressionTrigger : MonoBehaviour
 {
-    [SerializeField] private RotationMinigameManager rotationManager;
+    [SerializeField] private SimonSaysMinigameManager simonSaysManager;
 
     private void Start()
     {
-        rotationManager.OnSuccess += OnThirdShrineComplete;
+        simonSaysManager.OnSuccess += OnThirdShrineComplete;
     }
 
     private void OnThirdShrineComplete()
@@ -16,6 +16,6 @@ public class StoryProgressionTrigger : MonoBehaviour
 
     private void OnDestroy()
     {
-        rotationManager.OnSuccess -= OnThirdShrineComplete;
+        simonSaysManager.OnSuccess -= OnThirdShrineComplete;
     }
 }

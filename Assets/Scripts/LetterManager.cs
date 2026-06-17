@@ -87,7 +87,7 @@ public class LetterManager : MonoBehaviour
     {
         if (_story.canContinue)
         {
-            letterText.text = _story.Continue().Trim();
+            letterText.text = _story.ContinueMaximally().Trim();
         }
         else
         {
