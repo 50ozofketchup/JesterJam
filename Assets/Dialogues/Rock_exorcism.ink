@@ -45,13 +45,18 @@ You feel something step in, illuminating your heart and mind.
 
 
 === step5 ===
-Sounds of clacking, quaking and craking of stone surround you. The walls and the floor begin to shake, pushing you towards the ground. As you fall, the pocket of your robe turns inside out as if pulled. A leathery piece of fabric embellished with one of your Holy Symbols drops to the floor and you are only able to stare as the symbol of the Triad and creation gets ripped to pieces underneath the glowing Shrine.
+Sounds of clacking, quaking and craking of stone surround you. The walls and the floor begin to shake, pushing you towards the ground. As you fall, the pocket of your robe turns inside out as if pulled. 
+-> next
+
+=== next ===
+
+A leathery piece of fabric embellished with one of your Holy Symbols drops to the floor and you are only able to stare as the symbol of the Triad and creation gets ripped to pieces underneath the glowing Shrine.
 
 + Throw Holy Water 
 -> restart
 + Throw Holy Water & cast out the spirit
 -> restart
-+ Throw Holy Water, renounce the spirit & cite the Holy Passages of the torn symbol 
++ Throw Holy Water, renounce the spirit & evoke the symbol
 -> step6
 
 === step6 ===
@@ -80,7 +85,11 @@ Holding the leathery pieces you back away from the salt circle. The spirit is lo
 
 
 === success ===
-The writhing spirit swirls on the ground and up towards the ceiling. You see it wiggling in one of the cracks, escaping deeper to the caves. You sprinkle some Holy Water around the Shrine. It seems to be almost back to normal, but the thing might still return...
+The writhing spirit swirls on the ground and up towards the ceiling. You see it wiggling in one of the cracks, escaping deeper to the caves. 
+-> sprinkle
+
+=== sprinkle ===
+You sprinkle some Holy Water around the Shrine. It seems to be almost back to normal, but the thing might still return...
 
 + Pray while you fix the symbol and attach it to the Shrine # minigame:rotation
 -> END
