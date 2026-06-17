@@ -1,4 +1,9 @@
-You approach the once familiar Shrine which now stirs with ancient and threatening energy. The air around you feels oppressive like a storm is about to explode. You reach for your sachel and pull out your purple stole and other items. You then...
+You approach the once familiar Shrine which now stirs with ancient and threatening energy. The air around you feels oppressive like a storm is about to explode.
+-> sachel
+
+=== sachel ===
+
+You reach for your sachel and pull out your purple stole and other items. You then...
 
 + ...draw a salt ring
 -> step2
@@ -8,7 +13,12 @@ You approach the once familiar Shrine which now stirs with ancient and threateni
 -> restart
 
 === step2 ===
-The heaviness around you seems to retreat inside the salt ring. However the Shrine seems to be unaffected. There are strange and unintelligible whispers mumbling in your ears. While pushing away the noises surronding you...
+The heaviness around you seems to retreat inside the salt ring. However the Shrine seems to be unaffected.
+-> whispers
+
+=== whispers ===
+
+There are strange and unintelligible whispers mumbling in your ears. While pushing away the noises surronding you...
 
 + ... Throw Holy Water on it
 -> restart
@@ -18,7 +28,12 @@ The heaviness around you seems to retreat inside the salt ring. However the Shri
 -> step3
 
 === step3 ===
-The whispers get louder and clearer, mocking your resolve. They preach about the natural order and dominion of these lands, spitting insult to you, your God and purpose. You notice the voices reacting strongly to a few saints who are linked to water and taking action.
+The whispers get louder and clearer, mocking your resolve. They preach about the natural order and dominion of these lands, spitting insult to you, your God and purpose. 
+-> saints
+
+=== saints ===
+
+You notice the voices reacting strongly to a few saints who are linked to water and taking action.
 
 + Cast out the spirit
 -> restart
@@ -48,7 +63,12 @@ The stirring becomes chaotic, the Shrine swirling uncontrollably in the air. You
 -> END
 
 === success ===
-In a heartbeat everything quiets down. You sprinkle some Holy Water around the Shrine and breathe in the purified air. The Shrine seems to be almost back to normal, but something still feels off.
+In a heartbeat everything quiets down. You sprinkle some Holy Water around the Shrine and breathe in the purified air. 
+-> final
+
+=== final ===
+
+The Shrine seems to be almost back to normal, but something still feels off.
 
 + Pray and draw a symbol on the ground #minigame:tracing
 -> END
