@@ -98,9 +98,17 @@ public class LetterManager : MonoBehaviour
 
             if (hasNextSegment)
                 LoadSegment();
+            else if (_currentSegments == outroLetter)
+                LockGame();
             else
                 EndLetter();
         }
+    }
+
+    private void LockGame()
+    {
+        IsOpen = false;
+        enabled = false;
     }
 
     private void EndLetter()
