@@ -7,4 +7,6 @@ All praise the Holy! We greet you brother, take our invitation with a warm embra
 From:
 the Servants of the Blessed in the year of Lamb
 
+END OF GAME
+
     -> END
