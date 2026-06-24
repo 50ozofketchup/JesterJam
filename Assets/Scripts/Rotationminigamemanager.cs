@@ -1,5 +1,4 @@
 using UnityEngine;
-
 public class RotationMinigameManager : MonoBehaviour
 {
     [SerializeField] private GameObject minigamePanel;
@@ -16,12 +15,8 @@ public class RotationMinigameManager : MonoBehaviour
         rotationMinigame.OnSuccess += HandleSuccess;
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.R))
-            Open();
-    }
 
+    // called when player interacts with the puzzle object
     public void Open()
     {
         minigamePanel.SetActive(true);

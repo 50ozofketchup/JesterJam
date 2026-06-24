@@ -1,5 +1,4 @@
 using UnityEngine;
-
 public class StoryProgressionTrigger : MonoBehaviour
 {
     [SerializeField] private SimonSaysMinigameManager simonSaysManager;
@@ -9,6 +8,7 @@ public class StoryProgressionTrigger : MonoBehaviour
         simonSaysManager.OnSuccess += OnThirdShrineComplete;
     }
 
+    // triggered once the third shrine's Simon Says minigame is solved, advances to the outro letter
     private void OnThirdShrineComplete()
     {
         LetterManager.Instance.PlayOutroLetter();

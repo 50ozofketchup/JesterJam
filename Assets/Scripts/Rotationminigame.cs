@@ -23,9 +23,9 @@ public class RotationMinigame : MonoBehaviour
 
     public System.Action OnSuccess;
 
-    private int[] _rotations;
+    private int[] _rotations;     // current rotation state per cell (0-3, each step = 90°)
     private RectTransform[] _cells;
-    private bool[] _animating;
+    private bool[] _animating;    // prevents clicking a cell while it's mid-rotation
     private bool _active;
     private bool _completed;
 
@@ -45,6 +45,7 @@ public class RotationMinigame : MonoBehaviour
         if (instructionText != null) instructionText.text = string.Empty;
     }
 
+    // splits sourceImage into a 3x3 grid of clickable, rotatable cells
     private void BuildGrid()
     {
         foreach (Transform child in gridContainer)
@@ -64,6 +65,7 @@ public class RotationMinigame : MonoBehaviour
             int col = i % 3;
             int row = i / 3;
 
+            // cell container, positioned in the grid layout
             var cellGo = new GameObject($"Cell_{row}_{col}", typeof(RectTransform));
             cellGo.transform.SetParent(gridContainer, false);
 
@@ -74,6 +76,7 @@ public class RotationMinigame : MonoBehaviour
             float y = -(row * (cellH + cellGap) + cellH * 0.5f) + containerH * 0.5f;
             cellRT.anchoredPosition = new Vector2(x, y);
 
+            // image showing this cell's slice of the source texture
             var imgGo = new GameObject("Image", typeof(RawImage));
             imgGo.transform.SetParent(cellGo.transform, false);
 
@@ -85,15 +88,17 @@ public class RotationMinigame : MonoBehaviour
 
             var raw = imgGo.GetComponent<RawImage>();
             raw.texture = sourceImage;
-            int texRow = 2 - row;
+            int texRow = 2 - row; // flip row since UV (0,0) is bottom-left but grid row 0 is the top
             raw.uvRect = new Rect(col / 3f, texRow / 3f, 1f / 3f, 1f / 3f);
 
+            // click handling for this cell
             var trigger = cellGo.AddComponent<EventTrigger>();
             var entry = new EventTrigger.Entry { eventID = EventTriggerType.PointerClick };
-            int idx = i;
+            int idx = i; // local copy so closure captures the correct index
             entry.callback.AddListener(_ => OnCellClicked(idx));
             trigger.triggers.Add(entry);
 
+            // invisible raycast target covering the full cell so clicks register anywhere on it
             var blocker = cellGo.AddComponent<Image>();
             blocker.color = Color.clear;
             blocker.raycastTarget = true;
@@ -102,6 +107,7 @@ public class RotationMinigame : MonoBehaviour
         }
     }
 
+    // randomizes each cell's starting rotation
     private void ScramblePieces()
     {
         for (int i = 0; i < 9; i++)
@@ -120,6 +126,7 @@ public class RotationMinigame : MonoBehaviour
         StartCoroutine(AnimateRotation(idx, targetZ));
     }
 
+    // smoothly rotates one cell by 90°, then snaps to the exact target angle
     private IEnumerator AnimateRotation(int idx, float targetZ)
     {
         _animating[idx] = true;
@@ -139,11 +146,12 @@ public class RotationMinigame : MonoBehaviour
             yield return null;
         }
 
-        _cells[idx].localRotation = Quaternion.Euler(0f, 0f, targetZ);
+        _cells[idx].localRotation = Quaternion.Euler(0f, 0f, targetZ); // snap to exact value, avoids float dirft
         _animating[idx] = false;
         CheckCompletion();
     }
 
+    // puzzle solved once every cell is back at rotation 0
     private void CheckCompletion()
     {
         for (int i = 0; i < 9; i++)

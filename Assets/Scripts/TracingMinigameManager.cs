@@ -1,5 +1,4 @@
 using UnityEngine;
-
 public class TracingMinigameManager : MonoBehaviour
 {
     [SerializeField] private GameObject tracingPanel;
@@ -14,10 +13,13 @@ public class TracingMinigameManager : MonoBehaviour
     private void Start()
     {
         tracingPanel.SetActive(false);
+
+        // subscribe to minigame result events
         tracingMinigame.OnSuccess += HandleSuccess;
         tracingMinigame.OnFail += HandleFail;
     }
 
+    // called when player interacts with the shrine
     public void Open()
     {
         tracingPanel.SetActive(true);
@@ -29,6 +31,7 @@ public class TracingMinigameManager : MonoBehaviour
         tracingMinigame.StartMinigame();
     }
 
+    // shared cleanup, hide panel, give player control back
     private void Close()
     {
         tracingMinigame.StopMinigame();
@@ -54,6 +57,7 @@ public class TracingMinigameManager : MonoBehaviour
 
     private void OnDestroy()
     {
+        // unsubscribe to avoid dangling references
         tracingMinigame.OnSuccess -= HandleSuccess;
         tracingMinigame.OnFail -= HandleFail;
     }

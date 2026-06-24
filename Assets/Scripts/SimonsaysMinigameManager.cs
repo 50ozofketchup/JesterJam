@@ -1,5 +1,4 @@
 using UnityEngine;
-
 public class SimonSaysMinigameManager : MonoBehaviour
 {
     [SerializeField] private GameObject minigamePanel;
@@ -14,10 +13,13 @@ public class SimonSaysMinigameManager : MonoBehaviour
     private void Start()
     {
         minigamePanel.SetActive(false);
+
+        // subscribe to minigame result events
         simonSaysMinigame.OnSuccess += HandleSuccess;
         simonSaysMinigame.OnFail += HandleFail;
     }
 
+    // called when player interacts with the puzzle object
     public void Open()
     {
         minigamePanel.SetActive(true);
@@ -29,6 +31,7 @@ public class SimonSaysMinigameManager : MonoBehaviour
         simonSaysMinigame.StartMinigame();
     }
 
+    // shared cleanup, hide panel, give player control back
     private void Close()
     {
         simonSaysMinigame.StopMinigame();
@@ -54,6 +57,7 @@ public class SimonSaysMinigameManager : MonoBehaviour
 
     private void OnDestroy()
     {
+        // unsubscribe to avoid dangling references
         simonSaysMinigame.OnSuccess -= HandleSuccess;
         simonSaysMinigame.OnFail -= HandleFail;
     }

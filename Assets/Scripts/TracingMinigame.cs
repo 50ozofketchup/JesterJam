@@ -3,6 +3,9 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using TMPro;
 
+// ABANDON HOPE ALL YE WHO ENTER HERE
+// jos haluut säilyttää mielenterveyden nii kannattaa harkita vahvasti 
+// et haluutko scrollata alaspäin 
 public class TracingMinigame : MonoBehaviour
 {
     [Header("Stroke Settings")]
@@ -41,18 +44,19 @@ public class TracingMinigame : MonoBehaviour
     public System.Action OnSuccess;
     public System.Action OnFail;
 
-    private List<Vector2[]> _strokes = new List<Vector2[]>();
-    private List<Image[]> _strokeDots = new List<Image[]>();
-    private int[] _strokeProgress;
-    private bool[] _strokeDone;
+    private List<Vector2[]> _strokes = new List<Vector2[]>();   // each entry = one traceable segment's points
+    private List<Image[]> _strokeDots = new List<Image[]>();    // visual dots matching _strokes
+    private int[] _strokeProgress;  // how many points of each stroke are completed
+    private bool[] _strokeDone;     // whether each stroke is fully traced
     private int _mistakes = 0;
-    private int _activeStroke = -1;
+    private int _activeStroke = -1; // index of stroke currently being traced, -1 if none
     private bool _mouseHeld = false;
 
     public void StartMinigame()
     {
         ClearAllDots();
 
+        // build the triquetra shape and split it into traceable strokes
         _strokes = GenerateTriquetraStrokes();
         _strokeDots = new List<Image[]>();
         _strokeProgress = new int[_strokes.Count];
@@ -81,6 +85,7 @@ public class TracingMinigame : MonoBehaviour
     {
         if (_strokes == null || _strokes.Count == 0) return;
 
+        // convert mouse position to local coordinates within the tracing area
         Vector2 mousePos;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             tracingArea, Input.mousePosition, null, out mousePos);
@@ -92,6 +97,7 @@ public class TracingMinigame : MonoBehaviour
         {
             _mouseHeld = true;
 
+            // not currently tracing a stroke -> check if click landed on an untouched stroke's start point
             if (_activeStroke == -1)
             {
                 for (int i = 0; i < _strokes.Count; i++)
@@ -112,6 +118,7 @@ public class TracingMinigame : MonoBehaviour
             _mouseHeld = false;
             StopDrawingSound();
 
+            // only counts as a mistake if the player had already made progress on this stroke
             if (_activeStroke != -1 && _strokeProgress[_activeStroke] > 0)
                 RegisterMistake();
             else
@@ -128,6 +135,7 @@ public class TracingMinigame : MonoBehaviour
 
         if (distNext <= tolerance)
         {
+            // reached the next point on this stroke
             _strokeDots[si][idx].color = completedColor;
             _strokeProgress[si]++;
             UpdateProgress();
@@ -144,6 +152,7 @@ public class TracingMinigame : MonoBehaviour
         }
         else
         {
+            // check if player has strayed too far from the path 
             float distPrev = idx > 0
                 ? Vector2.Distance(mousePos, _strokes[si][idx - 1])
                 : 0f;
@@ -153,6 +162,7 @@ public class TracingMinigame : MonoBehaviour
         }
     }
 
+    // resets ALL strokes' progress and counts a strike against maxMistakes
     private void RegisterMistake()
     {
         if (failureEnabled) _mistakes++;
@@ -190,6 +200,7 @@ public class TracingMinigame : MonoBehaviour
         return true;
     }
 
+    // splits the full continuous triquetra point path into strokeCount roughly-equal chunks
     private List<Vector2[]> GenerateTriquetraStrokes()
     {
         List<Vector2> full = BuildFullTriquetraPoints();
@@ -212,12 +223,13 @@ public class TracingMinigame : MonoBehaviour
         return result;
     }
 
+    // generates the full triquetra outline as one continuous list of points (3 interlocking arcs)
     private List<Vector2> BuildFullTriquetraPoints()
     {
         float R = Mathf.Min(tracingArea.rect.width, tracingArea.rect.height) * 0.49f;
         Vector2 centeringOffset = new Vector2(0f, -0.25f * R);
-        float[] centresDeg = { -90f, 30f, 150f };
-        float arcSpanRad = -2f * Mathf.PI / 3f;
+        float[] centresDeg = { -90f, 30f, 150f }; // 3 circle centers, 120° apart
+        float arcSpanRad = -2f * Mathf.PI / 3f;   // each arc spans 120°
         var points = new List<Vector2>(pointsPerArc * 3);
 
         for (int i = 0; i < 3; i++)
@@ -225,7 +237,7 @@ public class TracingMinigame : MonoBehaviour
             float ca = centresDeg[i] * Mathf.Deg2Rad;
             Vector2 centre = new Vector2(Mathf.Cos(ca), Mathf.Sin(ca)) * R;
             float startA = ca + 4f * Mathf.PI / 3f;
-            int startJ = (i == 0) ? 0 : 1;
+            int startJ = (i == 0) ? 0 : 1; // skip first point on arcs 2/3 so they don't duplicate the previous arc's last point
 
             for (int j = startJ; j < pointsPerArc; j++)
             {
@@ -238,6 +250,7 @@ public class TracingMinigame : MonoBehaviour
         return points;
     }
 
+    // spawns a visual dot UI element for every point in one stroke
     private Image[] DrawStroke(int si, Vector2[] pts)
     {
         var dots = new Image[pts.Length];
@@ -257,6 +270,7 @@ public class TracingMinigame : MonoBehaviour
         return dots;
     }
 
+    // tints remaining (not-yet-traced) dots of a stroke to show it's the active one
     private void HighlightStroke(int si)
     {
         for (int j = _strokeProgress[si]; j < _strokeDots[si].Length; j++)
@@ -264,6 +278,7 @@ public class TracingMinigame : MonoBehaviour
                 _strokeDots[si][j].color = Color.Lerp(pathColor, activeColor, 0.4f);
     }
 
+    // destroys previously spawned stroke dots (called before generating a new shape)
     private void ClearAllDots()
     {
         foreach (var stroke in _strokeDots)

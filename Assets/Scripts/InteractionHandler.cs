@@ -1,6 +1,5 @@
 using UnityEngine;
 using TMPro;
-
 public class InteractionHandler : MonoBehaviour
 {
     [Header("Settings")]
@@ -17,7 +16,7 @@ public class InteractionHandler : MonoBehaviour
     [SerializeField] private DialogueManager dialogueManager;
 
     private Interactable _currentInteractable;
-    private bool _locked;
+    private bool _locked; // true while dialogue/minigame UI has control, disables raycasting
 
     public void SetLocked(bool locked)
     {
@@ -32,12 +31,12 @@ public class InteractionHandler : MonoBehaviour
             Interact(_currentInteractable);
     }
 
+    // raycasts forward from camera each frame to find an interactable object and update the prompt
     private void CheckForInteractable()
     {
         if (_locked) return;
 
         Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
-
         if (Physics.Raycast(ray, out RaycastHit hit, raycastDistance, interactMask))
         {
             Interactable interactable = hit.collider.GetComponentInParent<Interactable>();
@@ -49,10 +48,12 @@ public class InteractionHandler : MonoBehaviour
             }
         }
 
+        // nothing hit, or hit object has no Interactable
         _currentInteractable = null;
         if (promptText != null) promptText.text = string.Empty;
     }
 
+    // routes interaction to the correct system based on the interactable's configured minigame type
     private void Interact(Interactable interactable)
     {
         switch (interactable.minigameType)

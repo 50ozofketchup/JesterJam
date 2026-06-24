@@ -33,10 +33,10 @@ public class SimonSaysMinigame : MonoBehaviour
     public System.Action OnSuccess;
     public System.Action OnFail;
 
-    private List<int> _sequence = new List<int>();
-    private int _inputIndex = 0;
+    private List<int> _sequence = new List<int>(); // grows by one symbol each round
+    private int _inputIndex = 0;                   // player's progress through the current sequence
     private int _mistakes = 0;
-    private bool _acceptingInput = false;
+    private bool _acceptingInput = false;           // true only while waiting for player clicks, not during playback
     private bool _active = false;
 
     public void StartMinigame()
@@ -62,11 +62,12 @@ public class SimonSaysMinigame : MonoBehaviour
         if (instructionText != null) instructionText.text = string.Empty;
     }
 
+    // wires up click listeners and assigns sprites to each symbol button
     private void SetupButtons()
     {
         for (int i = 0; i < symbolButtons.Length; i++)
         {
-            int idx = i;
+            int idx = i; // local copy so closure captures the correct index
             symbolButtons[i].onClick.RemoveAllListeners();
             symbolButtons[i].onClick.AddListener(() => OnSymbolClicked(idx));
 
@@ -75,6 +76,7 @@ public class SimonSaysMinigame : MonoBehaviour
         }
     }
 
+    // adds one new random symbol to the sequence, plays it back, then opens input
     private IEnumerator NextRound()
     {
         _acceptingInput = false;
@@ -82,13 +84,14 @@ public class SimonSaysMinigame : MonoBehaviour
 
         _sequence.Add(Random.Range(0, symbolCount));
 
-        yield return new WaitForSeconds(0.6f);
+        yield return new WaitForSeconds(0.6f); // brief pause before playback starts
 
         yield return StartCoroutine(PlaySequence());
 
         _acceptingInput = true;
     }
 
+    // flashes every symbol in the current sequence in order
     private IEnumerator PlaySequence()
     {
         foreach (int idx in _sequence)
@@ -98,6 +101,7 @@ public class SimonSaysMinigame : MonoBehaviour
         }
     }
 
+    // briefly lights up one symbol (used both for playback and for player click feedback)
     private IEnumerator FlashSymbol(int idx)
     {
         SetAllDim();
@@ -118,7 +122,7 @@ public class SimonSaysMinigame : MonoBehaviour
     {
         if (!_active || !_acceptingInput) return;
 
-        StartCoroutine(FlashSymbol(idx));
+        StartCoroutine(FlashSymbol(idx)); // visual/audio feedback for the click itself
 
         if (idx == _sequence[_inputIndex])
         {
@@ -130,6 +134,7 @@ public class SimonSaysMinigame : MonoBehaviour
 
                 if (_sequence.Count >= winAtRound)
                 {
+                    // reached the final round length -> win
                     if (audioSource != null && winSound != null)
                         audioSource.PlayOneShot(winSound);
                     _active = false;
@@ -137,6 +142,7 @@ public class SimonSaysMinigame : MonoBehaviour
                 }
                 else
                 {
+                    // correctly repeated the sequence -> advance to next, longer round
                     if (audioSource != null && roundCompleteSound != null)
                         audioSource.PlayOneShot(roundCompleteSound);
                     StartCoroutine(NextRound());
@@ -157,12 +163,14 @@ public class SimonSaysMinigame : MonoBehaviour
             }
             else
             {
+                // wrong symbol, but mistakes remain -> reset sequenc and start over from round 1
                 _sequence.Clear();
                 StartCoroutine(NextRound());
             }
         }
     }
 
+    // resets all symbol images to their inactive state
     private void SetAllDim()
     {
         foreach (Image img in symbolImages)

@@ -27,12 +27,12 @@ public class MouseLook : MonoBehaviour
         float mouseX = Input.GetAxisRaw("Mouse X") * sensitivityX * Time.deltaTime;
         float mouseY = Input.GetAxisRaw("Mouse Y") * sensitivityY * Time.deltaTime;
 
-        // Vertical look (camera only) — clamp so you can't flip upside down
+        // Vertical look (camera only), clamp so you can't flip upside down
         _xRotation -= mouseY;
         _xRotation = Mathf.Clamp(_xRotation, -90f, 90f);
         transform.localRotation = Quaternion.Euler(_xRotation, 0f, 0f);
 
-        // Horizontal look — rotate the whole player body
+        // Horizontal look, rotate the whole player body
         playerBody.Rotate(Vector3.up * mouseX);
     }
 }

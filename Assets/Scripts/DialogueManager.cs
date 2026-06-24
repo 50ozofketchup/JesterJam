@@ -5,7 +5,7 @@ using Ink.Runtime;
 
 public class DialogueManager : MonoBehaviour
 {
-    public static DialogueManager Instance { get; private set; }
+    public static DialogueManager Instance { get; private set; } // singleton
 
     [Header("UI References")]
     [SerializeField] private GameObject dialoguePanel;
@@ -25,11 +25,12 @@ public class DialogueManager : MonoBehaviour
 
     public bool IsOpen { get; private set; }
 
-    private Story _story;
-    private TextAsset _currentInkJson;
+    private Story _story; // current Ink runtime story instance
+    private TextAsset _currentInkJson; // source asset, kept so "try again" can rebuild the story
 
     private void Awake()
     {
+        // singleton (no DontDestroyOnLoad here, unlike other managers, stays scene-local)
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -46,6 +47,7 @@ public class DialogueManager : MonoBehaviour
         tryAgainButton.onClick.AddListener(OnTryAgain);
     }
 
+    // call this to begin a dialoggue from an Ink JSON asset
     public void StartDialogue(TextAsset inkJson)
     {
         _currentInkJson = inkJson;
@@ -66,6 +68,7 @@ public class DialogueManager : MonoBehaviour
     private void Update()
     {
         if (!IsOpen) return;
+        // click to advance, but only when not waiting on a choice or the "try again" button
         if (Input.GetMouseButtonDown(0) && _story.currentChoices.Count == 0
             && !tryAgainButton.gameObject.activeSelf)
             AdvanceDialogue();
@@ -77,6 +80,7 @@ public class DialogueManager : MonoBehaviour
         {
             string line = _story.Continue();
 
+            // tags can redirect flow (e.g. trigger a minigame or restart) instead of showing this line
             if (HandleTags())
                 return;
 
@@ -88,10 +92,11 @@ public class DialogueManager : MonoBehaviour
         }
         else if (_story.currentChoices.Count == 0)
         {
-            EndDialogue();
+            EndDialogue(); // no more content and no choices pending -> dialogue is finished
         }
     }
 
+    // checks current Ink tags for special instructions, returns true if one was handled (caller should stop)
     private bool HandleTags()
     {
         foreach (string tag in _story.currentTags)
@@ -100,6 +105,7 @@ public class DialogueManager : MonoBehaviour
 
             if (trimmed == "restart")
             {
+                // continue once more to get the actual message to show alongside the retry button
                 _story.Continue();
                 dialogueText.text = _story.currentText.Trim();
                 HideChoices();
@@ -128,6 +134,7 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
+    // rebuilds the story from scratch and starts over (used after a "restart" tag)
     private void OnTryAgain()
     {
         tryAgainButton.gameObject.SetActive(false);
@@ -143,7 +150,7 @@ public class DialogueManager : MonoBehaviour
             {
                 choiceButtons[i].gameObject.SetActive(true);
                 choiceTexts[i].text = _story.currentChoices[i].text;
-                int idx = i;
+                int idx = i; // local copy so the closure captures the correct index
                 choiceButtons[i].onClick.RemoveAllListeners();
                 choiceButtons[i].onClick.AddListener(() => OnChoiceSelected(idx));
             }
@@ -166,8 +173,6 @@ public class DialogueManager : MonoBehaviour
         HideChoices();
         AdvanceDialogue();
     }
-
-
 
     private void EndDialogue()
     {

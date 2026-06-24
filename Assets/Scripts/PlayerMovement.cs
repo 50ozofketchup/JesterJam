@@ -71,7 +71,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void CheckGround()
     {
-        // Cast a small sphere at the groundCheck position — if it overlaps the
+        // Cast a small sphere at the groundCheck position, if it overlaps the
         // ground layer, the player is considered grounded.
         _isGrounded = Physics.CheckSphere(
             groundCheck.position,

@@ -4,9 +4,10 @@ public class TestTrigger : MonoBehaviour
 {
     [SerializeField] private TracingMinigameManager tracingManager;
 
-    private void Update()
+   /* private void Update()
     {
         if (Input.GetKeyDown(KeyCode.T))
             tracingManager.Open();
     }
+   */
 }
